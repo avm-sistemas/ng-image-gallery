@@ -1,0 +1,121 @@
+<mat-sidenav-container class="gallery-container">
+
+  <!-- Sidebar -->
+  <mat-sidenav #sidenav [opened]="sidenavOpen()" mode="side" class="gallery-sidenav">
+    <div class="sidenav-header">
+      <mat-icon class="brand-icon">photo_library</mat-icon>
+      <span class="brand-name">Galeria</span>
+    </div>
+
+    <mat-divider />
+
+    <!-- Dropdown de categorias -->
+    <div class="dropdown-section">
+      <mat-form-field appearance="outline" class="category-select">
+        <mat-label>Filtrar por categoria</mat-label>
+        <mat-select [value]="selectedCategoryId()" (selectionChange)="onDropdownChange($event.value)">
+          @for (cat of categories; track cat.id) {
+            <mat-option [value]="cat.id">
+              <mat-icon class="opt-icon">{{ cat.icon }}</mat-icon>
+              {{ cat.label }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-divider />
+
+    <!-- Lista de categorias -->
+    <mat-nav-list class="category-list">
+      @for (cat of categories; track cat.id) {
+        <mat-list-item
+          class="category-item"
+          [ngClass]="{ active: selectedCategoryId() === cat.id }"
+          (click)="selectCategory(cat.id)">
+          <mat-icon matListItemIcon>{{ cat.icon }}</mat-icon>
+          <span matListItemTitle>{{ cat.label }}</span>
+          <span matListItemMeta class="count-badge">{{ countForCategory(cat.id) }}</span>
+        </mat-list-item>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Main content -->
+  <mat-sidenav-content class="gallery-content">
+
+    <!-- Toolbar -->
+    <mat-toolbar class="gallery-toolbar" color="primary">
+      <button mat-icon-button (click)="toggleSidenav()" matTooltip="Alternar menu">
+        <mat-icon>{{ sidenavOpen() ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+      <mat-icon class="toolbar-brand-icon">photo_library</mat-icon>
+      <span class="toolbar-title">Galeria de Imagens</span>
+      <span class="spacer"></span>
+
+      <!-- Busca inline -->
+      <div class="search-box">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input
+          class="search-input"
+          placeholder="Buscar imagens..."
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value)" />
+        @if (searchQuery()) {
+          <button mat-icon-button class="clear-btn" (click)="searchQuery.set('')">
+            <mat-icon>close</mat-icon>
+          </button>
+        }
+      </div>
+    </mat-toolbar>
+
+    <!-- Gallery body -->
+    <div class="gallery-body">
+      <!-- Breadcrumb / header -->
+      <div class="gallery-head">
+        <div class="head-left">
+          <h2 class="category-heading">
+            <mat-icon>{{ categories | categoryIcon : selectedCategoryId() }}</mat-icon>
+            {{ selectedCategoryLabel() }}
+          </h2>
+          <mat-chip-set>
+            <mat-chip highlighted color="primary">
+              {{ filteredImages().length }} imagens
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+      </div>
+
+      <!-- Empty state -->
+      @if (filteredImages().length === 0) {
+        <div class="empty-state">
+          <mat-icon>image_search</mat-icon>
+          <p>Nenhuma imagem encontrada.</p>
+        </div>
+      }
+
+      <!-- Image grid -->
+      <div class="image-grid">
+        @for (image of filteredImages(); track image.id) {
+          <div class="image-card"
+               (click)="openModal(image)"
+               (mouseenter)="hoveredImageId.set(image.id)"
+               (mouseleave)="hoveredImageId.set(null)"
+               [matTooltip]="image.title">
+            <div class="image-wrapper">
+              <img [src]="image.thumbnail" [alt]="image.title" loading="lazy" />
+              <div class="image-overlay" [ngClass]="{ visible: hoveredImageId() === image.id }">
+                <mat-icon class="zoom-icon">zoom_in</mat-icon>
+                <div class="image-info">
+                  <span class="img-name">{{ image.title }}</span>
+                  <span class="img-cat">{{ image.description }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

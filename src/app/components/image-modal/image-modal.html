@@ -1,0 +1,53 @@
+<div class="modal-wrapper">
+  <!-- Header -->
+  <div class="modal-header">
+    <div class="modal-title">
+      <span class="img-title">{{ image.title }}</span>
+      <span class="img-desc">{{ image.description }}</span>
+    </div>
+    <div class="modal-actions">
+      <button mat-icon-button (click)="zoomOut()" [disabled]="!canZoomOut()" matTooltip="Diminuir zoom">
+        <mat-icon>zoom_out</mat-icon>
+      </button>
+      <span class="zoom-label">{{ (zoomLevel() * 100).toFixed(0) }}%</span>
+      <button mat-icon-button (click)="zoomIn()" [disabled]="!canZoomIn()" matTooltip="Ampliar zoom">
+        <mat-icon>zoom_in</mat-icon>
+      </button>
+      <button mat-icon-button (click)="resetZoom()" matTooltip="Redefinir zoom">
+        <mat-icon>zoom_out_map</mat-icon>
+      </button>
+      <button mat-icon-button mat-dialog-close matTooltip="Fechar">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Image area -->
+  <div class="image-container"
+       (wheel)="onWheel($event)"
+       (mousedown)="onMouseDown($event)"
+       (mousemove)="onMouseMove($event)"
+       (mouseup)="onMouseUp()"
+       (mouseleave)="onMouseUp()"
+       [class.dragging]="isDragging()">
+    <img [src]="image.url"
+         [alt]="image.title"
+         [ngStyle]="{
+           transform: 'translate(' + translateX() + 'px,' + translateY() + 'px) scale(' + zoomLevel() + ')',
+           cursor: zoomLevel() > 1 ? (isDragging() ? 'grabbing' : 'grab') : 'zoom-in'
+         }" />
+  </div>
+
+  <!-- Navigation -->
+  <div class="modal-nav">
+    <button mat-fab extended color="primary" (click)="navigate(-1)" [disabled]="!hasPrev">
+      <mat-icon>arrow_back</mat-icon>
+      Anterior
+    </button>
+    <span class="nav-counter">{{ currentIndex + 1 }} / {{ allImages.length }}</span>
+    <button mat-fab extended color="primary" (click)="navigate(1)" [disabled]="!hasNext">
+      Próxima
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </div>
+</div>

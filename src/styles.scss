@@ -1,0 +1,43 @@
+@use '@angular/material' as mat;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after { box-sizing: inherit; }
+
+// Custom Material theme
+$primary: mat.m2-define-palette(mat.$m2-blue-palette, 800, 600, 900);
+$accent:  mat.m2-define-palette(mat.$m2-light-blue-palette, 300);
+$warn:    mat.m2-define-palette(mat.$m2-red-palette);
+
+$theme: mat.m2-define-light-theme((
+  color: (primary: $primary, accent: $accent, warn: $warn),
+  typography: mat.m2-define-typography-config(),
+  density: 0
+));
+
+@include mat.all-component-themes($theme);
+
+// Modal panel override
+.gallery-modal-panel {
+  .mat-mdc-dialog-container {
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: transparent;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  }
+  .mdc-dialog__surface {
+    background: transparent;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+
+// Mat-select option icon alignment
+.mat-mdc-option { display: flex; align-items: center; }
