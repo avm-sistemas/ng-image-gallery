@@ -1,6 +1,17 @@
-# ImageGallery
+# Image Gallery
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.2.
+An Angular project featuring an image gallery with details, categories, and zoom functionality, populated by an array.
+
+## Screenshots
+
+### Main
+<img width="1860" height="912" alt="image" src="https://github.com/user-attachments/assets/5e2a2214-70e6-4c51-af5e-52320b9bb6b1" />
+
+### Image Detail
+<img width="1860" height="912" alt="image" src="https://github.com/user-attachments/assets/dc9d95b2-365c-49d0-be05-994a4776534c" />
+
+### Image Zoom
+<img width="1860" height="912" alt="image" src="https://github.com/user-attachments/assets/921de95e-db84-49a9-9ab7-f7bfc1d2acbd" />
 
 ## Development server
 
